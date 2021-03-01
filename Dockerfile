@@ -36,7 +36,9 @@ RUN cd /tmp && unzip snpe-1.47.0.zip
 
 RUN apt-get update && apt-get install -y \
     python3-dev \
-    python-dev
+    python-dev \
+    adb \
+    vim
 
 RUN cd /tmp && \
     /bin/bash -c "source snpe-1.47.0.2501/bin/dependencies.sh" && \
@@ -62,7 +64,20 @@ ENV PYTHONPATH $SNPE_ROOT/models/alexnet/scripts:$PYTHONPATH
 #setup SNPE_UDO_ROOT
 ENV SNPE_UDO_ROOT $SNPE_ROOT/share/SnpeUdo/
 
-#COPY mount/op_graph_optimizations.py /tmp/snpe-1.47.0.2501/lib/python/qti/aisw/converters/common/converter_ir/op_graph_optimizations.py
+# This ignores reshaping errors (PixelShuffle "support")
+# COPY mount/op_graph_optimizations.py /tmp/snpe-1.47.0.2501/lib/python/qti/aisw/converters/common/converter_ir/op_graph_optimizations.py
 
-#CMD ["/bin/bash"]
-CMD snpe-onnx-to-dlc -i /mnt/files/model.onnx
+## Uncomment only one of the following --------------------------
+# Uncomment for interactive shell
+CMD ["/bin/bash"]
+# Uncomment to convert an .onnx model to .dlc
+# CMD snpe-onnx-to-dlc -i /mnt/files/model.onnx
+# Uncomment to get a dlc info
+# CMD snpe-dlc-info -i /mnt/files/model.dlc
+# Uncommnent to run a benchmark on an attached adb device
+# CMD /mnt/files/run_benchmark.sh /mnt/files/benchmark_config.json 
+# Uncommennt to quantise the dlc model
+# CMD snpe-dlc-quantize --input_dlc /mnt/files/model.dlc --input_list /mnt/files/input_data/input_files.txt --output_dlc /mnt/files/model_quantized.dlc --enable_hta
+# Uncommnent to run a benchmark on an attached adb device (QUANTIZED)
+# CMD /mnt/files/run_benchmark.sh /mnt/files/benchmark_config_quantized.json 
+## --------------------------------------------------------------
