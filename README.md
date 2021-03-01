@@ -1,7 +1,8 @@
 # snpe-docker
 Docker that builds snpe 1.47 for onnx 
 
-To build and run:
+First download and place the snpe 1.47 zip in the root of this project, then, to build and run the docker with your snpe environment run the following:
+
 ```
 docker build -t snpe .
 docker run -it snpe
