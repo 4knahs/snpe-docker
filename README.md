@@ -10,6 +10,7 @@ First download and place the [snpe 1.47 zip](https://developer.qualcomm.com/soft
 ```bash
 $ git clone https://github.com/4knahs/snpe-docker.git
 $ cd snpe-docker
+$ # Download snpe 1.47 and place in this folder
 $ docker build -t snpe .
 ```
 
