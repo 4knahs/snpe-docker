@@ -24,15 +24,15 @@ Note that the above command:
 * Mounts the `mount/` folder into `/mnt/files` in the container. This is to be able to access your models but also retrieve the results from snpe runs.
 * Runs with priviledged mode and mounts `/dev/bus/usb`. This is to give the container visibility into adb devices connected via usb.
 
-All the snpe binaries should be accessible (e.g., `snpe-onnx-to-dlc`, `snpe-dlc-info`, `snpe-dlc-quantize`).
+All the snpe binaries should be accessible (e.g., `snpe-onnx-to-dlc`, `snpe-dlc-info`, `snpe-dlc-quantize`, etc).
 
 ## ONNX to DLC
 
-First, the onnx model (named `model.onnx`) should be placed in a folder named `mount/` in the root of this project (i.e., `mount/model.onnx`).
+First, the onnx model (named `model.onnx`) should be placed in the `mount/` folder (i.e., `mount/model.onnx`).
 
 Then, we included an helper script (`run.sh`) that basically runs the docker instance but also does a few more steps:
-* Kill the local adb daemon - this is to ensure that adb devices are visible from within the container
-* Docker build - in case you missed the previous step
+* Kill the local adb daemon - this is to ensure that adb devices are visible from within the container.
+* Docker build - in case you missed the previous step.
 * Docker run - this is the same as shown above, with the mount and priviledged properties.
 
 To convert `mount/model.onnx` simply run:
@@ -43,7 +43,7 @@ To convert `mount/model.onnx` simply run:
 
 ## Get DLC info
 
-Assuming the previous step was run and that it outputted a `model.dlc` file in the local `/mount/model.dlc`, you can run:
+Assuming the previous step was run and that it generated a `model.dlc` file in the local `/mount/model.dlc`, just run:
 
 ```bash
 ./run.sh snpe-dlc-info -i /mnt/files/model.dlc
