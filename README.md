@@ -1,10 +1,14 @@
 # snpe-docker
-Docker that builds snpe 1.47 for onnx 
+Docker that builds snpe 1.47 for onnx .
+
+Make sure to download snpe-1.47.0.zip and place it on the root folder of this repo before building the docker image.
+
+The onnx model should be placed in a folder named `mount` in the root of this project.
 
 To build and run:
 ```
 docker build -t snpe .
-docker run -it snpe
+docker run -v $(pwd)/mount:/mount/files -it snpe
 $ snpe-onnx-to-dlc -h
 usage: snpe-onnx-to-dlc [-h] [--input_network INPUT_NETWORK] [-o OUTPUT_PATH]
                         [--copyright_file COPYRIGHT_FILE]
