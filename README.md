@@ -5,7 +5,8 @@ Make sure to download snpe-1.47.0.zip and place it on the root folder of this re
 
 The onnx model should be placed in a folder named `mount` in the root of this project.
 
-To build and run:
+First download and place the snpe 1.47 zip in the root of this project, then, to build and run the docker with your snpe environment run the following:
+
 ```
 docker build -t snpe .
 docker run -v $(pwd)/mount:/mount/files -it snpe
