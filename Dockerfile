@@ -64,4 +64,8 @@ ENV PYTHONPATH $SNPE_ROOT/models/alexnet/scripts:$PYTHONPATH
 #setup SNPE_UDO_ROOT
 ENV SNPE_UDO_ROOT $SNPE_ROOT/share/SnpeUdo/
 
+# Allow permutations with > 6 arguments
+COPY mount/op_graph_optimizations.py /tmp/snpe-1.47.0.2501/lib/python/qti/aisw/converters/common/converter_ir/op_graph_optimizations.py
+COPY mount/data_translations.py /tmp/snpe-1.47.0.2501/lib/python/qti/aisw/converters/onnx/data_translations.py
+
 CMD ["/bin/bash"]
