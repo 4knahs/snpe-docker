@@ -353,6 +353,10 @@ class OnnxReshapeTranslation(OnnxTranslationBase):
     def __init__(self):
         OnnxTranslationBase.__init__(self)
         self.register_op_schema('Reshape', [1, 5])
+        self.state = 0
+        self.h = 0
+        self.w = 0
+        self.channels = 0
 
     def extract_parameters(self, src_op, graph):
         # There are two main versions of ONNX Reshape
@@ -378,17 +382,39 @@ class OnnxReshapeTranslation(OnnxTranslationBase):
 
             # Retrieve number of inputs
             reshape_number_of_inputs = graph.get_buffer(str(src_op.input[1])).shape[0]
+            print("reshape no. of inputs: ", reshape_number_of_inputs)
+            print("src_op.input[0].shape: ", graph.get_buffer(str(src_op.input[0])).shape)
             if reshape_number_of_inputs == 6:
                 # Retrieving Conv shape
-                batch_size, channels, h, w = graph.get_buffer(str(src_op.input[0])).shape
-                channels /= 4
-                shape = [batch_size, channels, 2, 2, h, w]
+                batch_size, self.channels, self.h, self.w = graph.get_buffer(str(src_op.input[0])).shape
+                self.channels /= 4
+                shape = [batch_size, self.channels, 2, 2, self.h, self.w]
+            elif reshape_number_of_inputs == 3:
+                if self.state == 0:
+                    shape = [3, 180, 320]
+                    self.state = 1
+                elif self.state == 1:
+                    shape = [3, 360, 640]
+                    self.state = 0
+            elif reshape_number_of_inputs == 2:
+                shape_in_first_dim = graph.get_buffer(str(src_op.input[0])).shape[0]
+                if shape_in_first_dim == 1:
+                    _, self.channels, self.h, self.w = graph.get_buffer(str(src_op.input[0])).shape
+                    #self.state = 1
+                    self.channels /= 4
+                    shape = [self.channels, 4 * self.h * self.w]
+                else:
+                    self.h, scale_1, self.w, scale_2 = graph.get_buffer(str(src_op.input[0])).shape
+                    shape = [self.h * scale_1, self.w * scale_2]
+                    #self.state = 0
+            elif reshape_number_of_inputs == 4:
+                shape = [2, 2, self.h, self.w]
             else:
                 # Retrieving Conv shape
                 batch_size, channels, _,_, h, w = graph.get_buffer(str(src_op.input[0])).shape
                 shape = [batch_size, channels, 2*h, 2*w]
 
-            print(shape)
+            print("Output shape: ", shape)
 
             # if graph.weights.has(shape_input):
             #     shape = graph.weights.fetch(shape_input).astype(numpy.int64).tolist()

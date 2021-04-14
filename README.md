@@ -134,3 +134,21 @@ To quantise the model do:
 Your new model will be in `mount/model_quantized.dlc`. As expected you can now benchmark this model as well, just make sure that in the above steps you update `mount/benchmark_config.json` to:
 * use `input_files.txt` instead of `android_input_files.txt`.
 * use `model_quantized.dlc` instead of `model.dlc`
+
+## Running the tensorflow inception example
+
+Here we will see how to run the inception example from snpe, we will skip some details from previous sections, like the details regarding our `run.sh`.
+
+To run the examples simply do:
+
+```bash
+./run.sh 
+root@container:/# python3 /tmp/snpe-1.47.0.2501/models/inception_v3/scripts/setup_inceptionv3.py -a /tmp/inception -r aip -d
+root@container:/# cd $SNPE_ROOT/models/inception_v3
+root@container:/# snpe-net-run --container dlc/inception_v3_quantized.dlc --input_list data/cropped/raw_list.txt
+root@container:/# python3 $SNPE_ROOT/models/inception_v3/scripts/show_inceptionv3_classifications.py -i data/cropped/raw_list.txt \
+                                                                                  -o output/ \
+                                                                                  -l data/imagenet_slim_labels.txt
+```
+
+For benchmarking you will need to create the benchmark config as seen in previous sections. Furthermore you will have to update the raw files list to point to the location in the mobile device storage.

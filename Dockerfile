@@ -30,6 +30,19 @@ RUN pip3 install \
     mako==1.1.4 \
     onnx==1.3.0
 
+# Tensorflow 1.6.0 is the recommended version in snpe
+RUN pip3 install \
+    absl-py==0.1.6 \
+    astor==0.6.0 \
+    gast==0.2.0 \
+    grpcio==1.8.6 \
+    numpy==1.13.3 \
+    six==1.10.0 \
+    protobuf==3.4.0 \
+    tensorboard==1.6.0 \
+    termcolor==1.1.0 \
+    tensorflow==1.6.0
+
 COPY snpe-1.47.0.zip /tmp/
 
 RUN cd /tmp && unzip snpe-1.47.0.zip
@@ -46,6 +59,7 @@ RUN cd /tmp && \
 
 ENV SNPE_ROOT /tmp/snpe-1.47.0.2501
 ENV ONNX_HOME /usr/local/lib/python3.5/dist-packages/onnx
+ENV TENSORFLOW_HOME /usr/local/lib/python3.5/dist-packages/tensorflow
 
 RUN cd $SNPE_ROOT && \
     /bin/bash -c "source bin/envsetup.sh -o $ONNX_HOME"
